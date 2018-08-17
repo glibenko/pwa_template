@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PWA_template</title>
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Weather PWA">
+    <link rel="apple-touch-icon" href="./img/pwa/icon-152x152.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            (async () => {
+                try {
+                    const reg = await navigator.serviceWorker.register('./sw.js', {scope: './'});
+                    console.log('Service worker зарегистрирован:', reg);
+                } catch (error) {
+                    console.log('Ошибка при регистрации service worker-а:', error);
+                }
+            })();
+            } else {
+                console.log('Текущий браузер не поддерживает service worker-ы.');
+            }
+    </script>
+</head>
+<body>
+
+<script>
+    navigator.serviceWorker.addEventListener('message', function (event) {
+        //listen message from SW
+        document.querySelector('.offline').style.display = 'block';
+        document.querySelector('.header').style.paddingTop = '36px';
+    });
+
+    window.addEventListener('online', function() {
+        document.querySelector('.offline').style.display = 'none';
+        document.querySelector('.header').style.paddingTop = '0';
+    });
+
+    window.addEventListener('offline', function () {
+        document.querySelector('.offline').style.display = 'block';
+        document.querySelector('.header').style.paddingTop = '36px';
+    });
+</script>
+</body>
+</html>
